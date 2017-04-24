@@ -9,7 +9,7 @@ RUN apk update \
 #install aditional software, for me nano editor
 RUN apk add --no-cache autoconf postfix icu-dev\
     apk-cron ca-certificates curl \
-    bash build-base diffutils  git \
+    bash build-base diffutils  git rsync \
     imagemagick imap less libtool linux-headers musl \
     nano openssl-dev patch patchutils gcc g++ make \
     perl pcre-dev \
