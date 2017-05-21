@@ -1,22 +1,24 @@
-#lordius/alpine-base:edge
-FROM alpine:edge
+#lordius/alpine-base:v3.4
+FROM alpine:3.4
 MAINTAINER lordius<andriy.khomych@gmail.com>
 
 #Update indexed
-RUN apk --no-cache update \
-    apk --no-cache upgrade 
+RUN apk update \
+    apk upgrade 
     
 #install aditional software, for me nano editor
 RUN apk add --no-cache autoconf postfix icu-dev\
-    apk-cron ca-certificates curl-dev libcurl \
-    bash build-base diffutils  git \
+    apk-cron ca-certificates curl \
+    bash build-base diffutils  git rsync \
     imagemagick imap less libtool linux-headers musl \
-    nano openssl patch patchutils gcc g++ make \
-    pcre-dev fcgi-dev jpeg-dev libmcrypt-dev bzip2-dev \
+    nano openssl-dev patch patchutils gcc g++ make \
+    perl pcre-dev jpeg-dev libmcrypt-dev bzip2-dev fcgi-dev \
     tar wget xz zlib-dev imagemagick-dev sed re2c m4 acl-dev \
     libpng-dev libxslt-dev postgresql-dev perl-dev file libedit-dev \
-    libxml2-dev imap-dev
+    libxml2-dev imap-dev cyrus-sasl-dev
     
+#install ssh
+RUN apk add --update openssh
 		
 # Configure git
 RUN git config --global user.name "Lordius Base" && \
