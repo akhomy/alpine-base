@@ -15,7 +15,10 @@ RUN apk add --no-cache autoconf postfix icu-dev\
     pcre-dev fcgi-dev jpeg-dev libmcrypt-dev bzip2-dev \
     tar wget xz zlib-dev imagemagick-dev sed re2c m4 acl-dev \
     libpng-dev libxslt-dev postgresql-dev perl-dev file libedit-dev \
-    libxml2-dev imap-dev cyrus-sasl-dev
+    libxml2-dev imap-dev cyrus-sasl-dev rsync
+    
+#install ssh
+RUN apk add --update openssh
 
 # Configure git
 RUN git config --global user.name "Lordius Base" && \
