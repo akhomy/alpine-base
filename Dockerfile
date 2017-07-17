@@ -12,11 +12,24 @@ RUN apk add --no-cache autoconf postfix icu-dev\
     bash build-base diffutils  git rsync \
     imagemagick imap less libtool linux-headers musl \
     nano openssl-dev patch patchutils gcc g++ make \
-    perl pcre-dev \
-    tar wget xz zlib-dev imagemagick-dev 
+    perl pcre-dev imagemagick-dev tar wget xz zlib-dev \
+    p7zip python py-lxml py-pip sshpass sudo
+
+#Install ansible
+RUN apk --update add --virtual \
+		build-dependencies \
+		python-dev \
+		musl-dev \ 
+		libffi-dev && \
+    pip install --upgrade pip
+                
+
+RUN pip install git+git://github.com/ansible/ansible.git@stable-2.2
     
 #install ssh
 RUN apk add --update openssh
+
+
 		
 # Configure git
 RUN git config --global user.name "Lordius Base" && \
