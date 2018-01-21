@@ -1,6 +1,6 @@
 #lordius/alpine-base:edge
 FROM alpine:edge
-MAINTAINER lordius<andriy.khomych@gmail.com>
+LABEL maintainer=andriy.khomych@gmail.com
 
 #Update indexed
 RUN apk --no-cache update \
