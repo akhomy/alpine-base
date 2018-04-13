@@ -1,12 +1,12 @@
-#lordius/alpine-base:edge
-FROM alpine:edge
+# lordius/alpine-base:v3.7
+FROM alpine:3.7
 LABEL maintainer=andriy.khomych@gmail.com
 
-#Update indexed
+# Update indexed.
 RUN apk --no-cache update \
     apk --no-cache upgrade
 
-#install aditional software, for me nano editor
+# Install aditional software, for me nano editor.
 RUN apk add --no-cache autoconf postfix icu-dev\
     apk-cron ca-certificates curl-dev libcurl \
     bash build-base diffutils  git \
@@ -18,7 +18,7 @@ RUN apk add --no-cache autoconf postfix icu-dev\
     libxml2-dev imap-dev cyrus-sasl-dev rsync p7zip python py-lxml py-pip \
     sshpass sudo
 
-#Install ansible
+# Install ansible.
 RUN apk --update add --virtual \
 		build-dependencies \
 		python-dev \
@@ -29,15 +29,15 @@ RUN apk --update add --virtual \
 
 RUN pip install git+git://github.com/ansible/ansible.git@stable-2.2
     
-#install ssh
+# Install ssh.
 RUN apk add --update openssh
 
-# Configure git
+# Configure git.
 RUN git config --global user.name "Lordius Base" && \
     git config --global user.email "admin@lordius.com" && \
     git config --global push.default current
     
-#Clean trash
+# Clean trash.
 RUN  rm -rf /var/lib/apt/lists/* && \
      rm -rf /var/cache/apk/* && \
      rm -rf /var/www/localhost/htdocs/*
