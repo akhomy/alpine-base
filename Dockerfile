@@ -1,5 +1,5 @@
-#lordius/alpine-base:edge
-FROM alpine:edge
+#lordius/alpine-base:v3.5
+FROM alpine:3.5  
 LABEL maintainer=andriy.khomych@gmail.com
 
 #Update indexed
@@ -33,7 +33,7 @@ RUN pip install git+git://github.com/ansible/ansible.git@stable-2.2
 RUN apk add --update openssh
 
 # Configure git
-RUN git config --global user.name "Lordius Base" && \
+RUN git config --global user.name "Alpine Package" && \
     git config --global user.email "admin@lordius.com" && \
     git config --global push.default current
     
