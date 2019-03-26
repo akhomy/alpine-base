@@ -1,43 +1,71 @@
-#lordius/alpine-base:edge
-FROM alpine:edge
+# akhomy/alpine-base
+ARG ALPINE_VER=latest
+FROM alpine:${ALPINE_VER}
 LABEL maintainer=andriy.khomych@gmail.com
 
-#Update indexed
-RUN apk --no-cache update \
-    apk --no-cache upgrade
+ARG ALPINE_DEV
+RUN set -xe; \
+  \
+  apk add --update --no-cache \
+  bash \
+  ca-certificates \
+  curl \
+  gzip \
+  tar \
+  unzip \
+  wget; \
+  \
+  if [ -n "${ALPINE_DEV}" ]; then \
+    apk --no-cache update; \
+    apk --no-cache upgrade; \
+    apk add --update  git \
+                      libcurl \
+                      curl-dev \
+                      coreutils \
+                      jq \
+                      sed \
+                      gawk \
+                      grep \
+                      rsync \
+                      patch \
+                      patchutils \
+                      diffutils; \
+    if [  -z $(echo "$ALPINE_DEV"|sed "/cron/d") ]; then \
+      apk add --update apk-cron; \
+    fi; \
+    if [  -z $(echo "$ALPINE_DEV"|sed "/archives/d") ]; then \
+      apk add --update \
+                xz \
+                p7zip \
+                bzip2-dev \
+                zlib-dev \
+                tar; \
+    fi; \
+    if [  -z $(echo "$ALPINE_DEV"|sed "/editors/d") ]; then \
+      apk add --update nano; \
+    fi; \
+    if [  -z $(echo "$ALPINE_DEV"|sed "/ssh/d") ]; then \
+      apk add --update \
+                sshpass \
+                openssh \
+                sudo; \
+    fi; \
+    # TODO FIX Ansible
+    if [  -z $(echo "$ALPINE_DEV"|sed "/ansible/d") ]; then \
+      apk --update add --virtual \
+            build-dependencies \
+            python-dev \
+            musl-dev \
+            libffi-dev \
+            py-pip && \
+            pip install --upgrade pip && \
+            pip install git+git://github.com/ansible/ansible.git@stable-2.2; \
+    fi; \
+    if [[ "$ALPINE_DEV" == *"ssl"* ]]; then \
+      apk add --update openssl; \
+    fi; \
+  fi;
 
-#install aditional software, for me nano editor
-RUN apk add --no-cache autoconf postfix icu-dev\
-    apk-cron ca-certificates curl-dev libcurl \
-    bash build-base diffutils  git \
-    imagemagick imap less libtool linux-headers musl \
-    nano openssl patch patchutils gcc g++ make \
-    pcre-dev fcgi-dev jpeg-dev libmcrypt-dev bzip2-dev \
-    tar wget xz zlib-dev imagemagick-dev sed re2c m4 acl-dev \
-    libpng-dev libxslt-dev postgresql-dev perl-dev file libedit-dev \
-    libxml2-dev imap-dev cyrus-sasl-dev rsync p7zip python py-lxml py-pip \
-    sshpass sudo
-
-#Install ansible
-RUN apk --update add --virtual \
-		build-dependencies \
-		python-dev \
-		musl-dev \ 
-		libffi-dev && \
-    pip install --upgrade pip
-                
-
-RUN pip install git+git://github.com/ansible/ansible.git@stable-2.2
-    
-#install ssh
-RUN apk add --update openssh
-
-# Configure git
-RUN git config --global user.name "Lordius Base" && \
-    git config --global user.email "admin@lordius.com" && \
-    git config --global push.default current
-    
-#Clean trash
+# Cleans trash.
 RUN  rm -rf /var/lib/apt/lists/* && \
-     rm -rf /var/cache/apk/* && \
-     rm -rf /var/www/localhost/htdocs/*
+     rm -rf /var/cache/apk/*
