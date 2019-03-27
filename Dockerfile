@@ -2,7 +2,8 @@
 ARG ALPINE_VER=latest
 FROM alpine:${ALPINE_VER}
 LABEL maintainer=andriy.khomych@gmail.com
-ENV IMAGE_EXTENSIONS=minimal
+ARG IMAGE_EXTENSIONS=minimal
+ENV IMAGE_EXTENSIONS=${IMAGE_EXTENSIONS}
 # Creates /temp_dir for using.
 RUN mkdir /temp_docker && chmod -R +x /temp_docker && cd /temp_docker
 RUN mkdir /temp_docker/extensions && chmod -R +x /temp_docker/extensions
