@@ -11,7 +11,6 @@ apk add --no-cache --purge -uU \
                                 .build-dependencies \
                                 build-base \
                                 libffi-dev \
-                                openssl-dev \
                                 py-pip \
                                 python-dev \
 && \
